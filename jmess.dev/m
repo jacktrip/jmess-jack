@@ -1,0 +1,7 @@
+#!/bin/bash
+
+rm Makefile
+echo "Makefile deleted"
+
+qmake-qt4 jmess.pro
+echo "qmake-qt4 Makefile built."
