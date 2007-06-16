@@ -23,6 +23,8 @@
 #include <QtXml>
 #include <QIODevice>
 
+#include "jmess.h"
+
 using namespace std;
 
 int main(int argc, char** argv)
@@ -43,17 +45,17 @@ int main(int argc, char** argv)
   input.appendChild(input_name);
 
 
-  QDomElement connection2 = jmess_xml.createElement("connection");
-  QDomElement output2 = jmess_xml.createElement("output");
-  QDomElement input2 = jmess_xml.createElement("input");
-  QDomText output_name2 = jmess_xml.createTextNode("jack:out222");
-  QDomText input_name2 = jmess_xml.createTextNode("jack:in2");
+  connection = jmess_xml.createElement("connection");
+  output = jmess_xml.createElement("output");
+  input = jmess_xml.createElement("input");
+  output_name = jmess_xml.createTextNode("jack:out222");
+  input_name = jmess_xml.createTextNode("jack:in2");
   
-  jmess_xml.appendChild(connection2);
-  connection2.appendChild(output2);
-  connection2.appendChild(input2);
-  output2.appendChild(output_name2);
-  input2.appendChild(input_name2);
+  jmess_xml.appendChild(connection);
+  connection.appendChild(output);
+  connection.appendChild(input);
+  output.appendChild(output_name);
+  input.appendChild(input_name);
 
 
 
@@ -68,7 +70,11 @@ int main(int argc, char** argv)
   QTextStream out(&file);
   jmess_xml.save(out, Indent);
 
+  XMLWrite cacumen;
+  cout << "cacumen" << endl;
+
+  JackLSP testJackLSP;
+  testJackLSP.getConnectedPorts();
+
   return 0;
-  
-  
 }

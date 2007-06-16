@@ -18,19 +18,71 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#ifndef __XMLPARSE_H
-#define __XMLPARSE_H
 
-class XMLParse {
+
+/**
+ * ******************************************************************************
+ * XMLWrite.h
+ * ******************************************************************************
+ */
+
+
+#ifndef __XMLWRITE_H
+#define __XMLWRITE_H
+
+#include <iostream>
+#include <QtXml>
+#include <QIODevice>
+
+using namespace std;
+
+class XMLWrite {
 
 public: 
-  XMLParse(); //Construtor
-  virtual ~XMLParse(): //Destructor
+  XMLWrite();
+  virtual ~XMLWrite();
 
+  void writeOutput();
 
-
-
+private:
+  QDomDocument jmess_xml;
+  QDomElement connection;
+  QDomElement output;
+  QDomElement input;
+  QDomText output_name;
+  QDomText input_name;
+};
 #endif
 
 
 
+/**
+ * ******************************************************************************
+ * JackLSP.h
+ * List active Jack ports
+ * ******************************************************************************
+ */
+
+#ifndef __JACKLSP_H
+#define __JACKLSP_H
+
+#include <iostream>
+
+#include <jack/jack.h>
+
+using namespace std;
+
+class JackLSP {
+
+public: 
+  JackLSP();
+  virtual ~JackLSP();
+
+  void getConnectedPorts();
+
+private:
+  jack_client_t *client; //dummy client to get ports
+  jack_status_t status;
+  const char **ports, **connections; //vector of ports and connections
+};
+#endif
