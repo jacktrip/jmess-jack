@@ -30,11 +30,17 @@
 #define __JMESS_H
 
 #include <iostream>
+
 #include <QtXml>
 #include <QIODevice>
+#include <QString>
+#include <QVector>
+
 #include <jack/jack.h>
 
 using namespace std;
+
+const int Indent = 2;
 
 class JMess {
 
@@ -46,15 +52,20 @@ public:
   void getConnectedPorts();
 
 private:
+  //jack_client_t *client; //dummy client to get ports
+  //jack_status_t status;
+  //const char **ports, **connections; //vector of ports and connections
+  //const char **connected_ports;
+  //QVector<QString> caca;
+
+  QVector<QVector<QString> > ConnectedPorts;
+
   QDomDocument jmess_xml;
+  QDomElement root;
   QDomElement connection;
   QDomElement output;
   QDomElement input;
   QDomText output_name;
   QDomText input_name;
-
-  jack_client_t *client; //dummy client to get ports
-  jack_status_t status;
-  const char **ports, **connections; //vector of ports and connections
 };
 #endif

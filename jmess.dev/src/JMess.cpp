@@ -29,61 +29,117 @@
 
 JMess::JMess()
 {
-  connection = jmess_xml.createElement("connection");
-  output = jmess_xml.createElement("output");
-  input = jmess_xml.createElement("input");
-  output_name = jmess_xml.createTextNode("");
-  input_name = jmess_xml.createTextNode("");
-  cout << "cacumen CONSTR" << endl;
+  //connection = jmess_xml.createElement("connection");
+  //output = jmess_xml.createElement("output");
+  //input = jmess_xml.createElement("input");
+  //output_name = jmess_xml.createTextNode("");
+  //input_name = jmess_xml.createTextNode("");
+  //cout << "cacumen CONSTR" << endl;
 }
 
 
 JMess::~JMess()
 {
+  //delete &ConnectedPorts;
 
 }
 
 
 void JMess::writeOutput()
 {
+  QVector<QString> OutputInput(2);
+  
+  this->getConnectedPorts();
 
+  //cout << "SIZE: " << endl;
+  //cout << "SIZE: " << ConnectedPorts.size() << endl;
+  root = jmess_xml.createElement("jmess");
+  for (QVector<QVector<QString> >::iterator it = ConnectedPorts.begin();
+       it != ConnectedPorts.end(); ++it) {
+    OutputInput = *it;
+    cout << "----------------------------------------------------" << endl;
+    cout << "Output ===> " <<qPrintable(OutputInput[0]) << endl;
+    cout << "Input ===> " <<qPrintable(OutputInput[1]) << endl;
+
+    connection = jmess_xml.createElement("connection");
+    output = jmess_xml.createElement("output");
+    input = jmess_xml.createElement("input");
+    output_name = jmess_xml.createTextNode(OutputInput[0]);
+    input_name = jmess_xml.createTextNode(OutputInput[1]);
+
+    jmess_xml.appendChild(root);
+    root.appendChild(connection);
+    connection.appendChild(output);
+    connection.appendChild(input);
+    output.appendChild(output_name);
+    input.appendChild(input_name);
+  }
+
+  QFile file("caca.xml");
+  if (!file.open(QIODevice::WriteOnly)) {
+    cerr << "Cannot open file for writing: "
+	 << qPrintable(file.errorString()) << endl;
+    exit(1);
+    //return 1;
+  }
+
+  QTextStream out(&file);
+  jmess_xml.save(out, Indent);
 }
 
-/**
- * JMess::getConnectedPorts method is going to return a list of 
+/*
+ * getConnectedPorts method is going to return a list of 
  * ouput ports that have connections, i.e., that are connected to something
 */
 void JMess::getConnectedPorts()
 {
-  /** 
-   * Open a client connection to the JACK server.  Starting a
-   * new server only to list its ports seems pointless, so we
-   * specify JackNoStartServer. 
-   */
+  jack_client_t *client; //dummy client to get ports
+  jack_status_t status;
+  const char **ports, **connections; //vector of ports and connections
+  //Vector<QVector<QString> > ConnectedPorts;
+  QVector<QString> OutputInput(2); //helper variable
+  
+  //Open a client connection to the JACK server.  Starting a
+  //new server only to list its ports seems pointless, so we
+  //specify JackNoStartServer. 
   client = jack_client_open ("lsp", JackNoStartServer, &status);
   if (client == NULL) {
     if (status & JackServerFailed) {
-      fprintf (stderr, "JACK server not running\n");
+      cerr << "JACK server not running" << endl;
     } else {
-      fprintf (stderr, "jack_client_open() failed, "
-	       "status = 0x%2.0x\n", status);
+      cerr << "jack_client_open() failed, " 
+	   << "status = 0x%2.0x\n" << status << endl;
     }
-    //return 1;
+    exit(1);
   }
 
-  /**
-   * Get ports contains a list of all the ports active.
-   * We only get ouput ports here.
-   */
+  //Get active output ports.
   ports = jack_get_ports (client, NULL, NULL, JackPortIsOutput);
   
-  /**
+  for (unsigned int out_i = 0; ports[out_i]; ++out_i) {
+    if ((connections = jack_port_get_all_connections 
+	 (client, jack_port_by_name(client, ports[out_i]))) != 0) {
+      for (unsigned int in_i = 0; connections[in_i]; ++in_i) {
+	OutputInput[0] = ports[out_i];
+	//cout << "Output ===> " <<qPrintable(OutputInput[0]) << endl;
+	OutputInput[1] = connections[in_i];
+	//cout << "Input ===> " << qPrintable(OutputInput[1]) << endl;
+	ConnectedPorts.append(OutputInput);
+      }
+    }
+  }
+
+}
+  
+  /*
    * Iterate thought all the ports (outputs) to get the connections 
    * to which (inputs) they are connected.
    * TODO:***************
    *  Output an array of strings with all the connections. Use qt string classes
    * ********************   
   */
+
+  /*
   for (unsigned int i = 0; ports[i]; ++i) {
     //printf ("%s\n", ports[i]);
     if ((connections = jack_port_get_all_connections (client, jack_port_by_name(client, ports[i]))) != 0) {
@@ -97,7 +153,9 @@ void JMess::getConnectedPorts()
       free (connections);
     } 
   }  
+  */
 
+  //caca = ports;
   /*
    * TODO:***************
    * Try to get just the ouput ports that are connected to something
@@ -109,6 +167,38 @@ void JMess::getConnectedPorts()
     cout <ck_port_connected (jack_port_by_name(client, ports[i]));
   }
   */
-}
+
+
+  
+  /*
+  cout << "SUPER CACA" << endl;
+  for (unsigned int i = 0; ports[i]; ++i) {
+    //cout << "LIST OF ACTIVE PORTS (OUPUTS): " << i << endl;
+    //cout << ports[i] << endl;
+
+    caca.append(ports[i]);
+    cout << "mamukea   " << qPrintable(caca[i]) << endl;
+
+
+    //caca[i] = "fdsjk fjsdklfjs klfsjdlfk s";
+    //cout << qPrintable(caca.at(i)) << endl;
+    //cout << "connected_ports[i]" << endl;
+    //cout << caca.value(i) << endl;
+  }
+  return caca;
+  */
+
+
+  //QString cacumen = "cacument String";
+  //cout << "FAULT!!!!! " << endl;
+  //cout << qPrintable(cacumen) << endl;
+
+
+
+
+
+
+
+
 
 

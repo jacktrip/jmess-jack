@@ -22,6 +22,7 @@
 #include <iostream>
 #include <QtXml>
 #include <QIODevice>
+#include <QIODevice>
 
 #include "JMess.h"
 
@@ -29,6 +30,11 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
+
+  JMess testJackLSP;
+  //testJackLSP.getConnectedPorts();
+  testJackLSP.writeOutput();
+  /*
   const int Indent = 2;
 
   QDomDocument jmess_xml;
@@ -72,9 +78,7 @@ int main(int argc, char** argv)
 
   JMess cacumen;
   cout << "cacumen" << endl;
-
-  JMess testJackLSP;
-  testJackLSP.getConnectedPorts();
+  */
 
   return 0;
 }
