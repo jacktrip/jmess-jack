@@ -19,30 +19,31 @@
 */
 
 
-
 /**
  * ******************************************************************************
- * XMLWrite.h
+ * JMess.h
  * ******************************************************************************
  */
 
 
-#ifndef __XMLWRITE_H
-#define __XMLWRITE_H
+#ifndef __JMESS_H
+#define __JMESS_H
 
 #include <iostream>
 #include <QtXml>
 #include <QIODevice>
+#include <jack/jack.h>
 
 using namespace std;
 
-class XMLWrite {
+class JMess {
 
 public: 
-  XMLWrite();
-  virtual ~XMLWrite();
+  JMess();
+  virtual ~JMess();
 
   void writeOutput();
+  void getConnectedPorts();
 
 private:
   QDomDocument jmess_xml;
@@ -51,36 +52,7 @@ private:
   QDomElement input;
   QDomText output_name;
   QDomText input_name;
-};
-#endif
 
-
-
-/**
- * ******************************************************************************
- * JackLSP.h
- * List active Jack ports
- * ******************************************************************************
- */
-
-#ifndef __JACKLSP_H
-#define __JACKLSP_H
-
-#include <iostream>
-
-#include <jack/jack.h>
-
-using namespace std;
-
-class JackLSP {
-
-public: 
-  JackLSP();
-  virtual ~JackLSP();
-
-  void getConnectedPorts();
-
-private:
   jack_client_t *client; //dummy client to get ports
   jack_status_t status;
   const char **ports, **connections; //vector of ports and connections

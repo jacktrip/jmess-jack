@@ -19,17 +19,15 @@
 */
 
 
-#include "jmess.h"
-
 /**
  * ******************************************************************************
- * XMLWrite.cpp
+ * JMess.cpp
  * ******************************************************************************
  */
 
-/* #include "XMLWrite.h" */
+#include "JMess.h"
 
-XMLWrite::XMLWrite()
+JMess::JMess()
 {
   connection = jmess_xml.createElement("connection");
   output = jmess_xml.createElement("output");
@@ -40,42 +38,22 @@ XMLWrite::XMLWrite()
 }
 
 
-XMLWrite::~XMLWrite()
+JMess::~JMess()
 {
 
 }
 
 
-void XMLWrite::writeOutput()
+void JMess::writeOutput()
 {
 
 }
-
-/*
- * ******************************************************************************
- * JackLSP.cpp
- * List active Jack ports
- * ******************************************************************************
- */
-
-/* #include "JackLSP.h" */
-
-JackLSP::JackLSP()
-{
-
-}
-
-JackLSP::~JackLSP()
-{
-
-}
-
 
 /**
- * JackLSP::getConnectedPorts method is going to return a list of 
+ * JMess::getConnectedPorts method is going to return a list of 
  * ouput ports that have connections, i.e., that are connected to something
 */
-void JackLSP::getConnectedPorts()
+void JMess::getConnectedPorts()
 {
   /** 
    * Open a client connection to the JACK server.  Starting a

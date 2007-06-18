@@ -23,7 +23,7 @@
 #include <QtXml>
 #include <QIODevice>
 
-#include "jmess.h"
+#include "JMess.h"
 
 using namespace std;
 
@@ -70,10 +70,10 @@ int main(int argc, char** argv)
   QTextStream out(&file);
   jmess_xml.save(out, Indent);
 
-  XMLWrite cacumen;
+  JMess cacumen;
   cout << "cacumen" << endl;
 
-  JackLSP testJackLSP;
+  JMess testJackLSP;
   testJackLSP.getConnectedPorts();
 
   return 0;
