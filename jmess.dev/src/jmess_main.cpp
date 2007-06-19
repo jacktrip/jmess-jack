@@ -34,8 +34,14 @@ int main(int argc, char** argv)
   JMess testJackLSP;
   //testJackLSP.getConnectedPorts();
   testJackLSP.writeOutput();
+
+  testJackLSP.disconnectAll();
+  testJackLSP.parseXML();
+
   /*
   const int Indent = 2;
+
+
 
   QDomDocument jmess_xml;
   QDomElement connection = jmess_xml.createElement("connection");

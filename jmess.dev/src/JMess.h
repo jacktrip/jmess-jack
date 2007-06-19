@@ -24,17 +24,18 @@
  * JMess.h
  * ******************************************************************************
  */
-
-
 #ifndef __JMESS_H
 #define __JMESS_H
 
 #include <iostream>
 
-#include <QtXml>
 #include <QIODevice>
 #include <QString>
 #include <QVector>
+#include <QtXml>
+#include <QXmlSimpleReader>
+#include <QXmlInputSource>
+#include <QXmlContentHandler>
 
 #include <jack/jack.h>
 
@@ -49,10 +50,12 @@ public:
   virtual ~JMess();
 
   void writeOutput();
-  void getConnectedPorts();
+  void setConnectedPorts();
+  void disconnectAll();
+  void parseXML();
 
 private:
-  //jack_client_t *client; //dummy client to get ports
+  jack_client_t *client; //dummy client to get ports
   //jack_status_t status;
   //const char **ports, **connections; //vector of ports and connections
   //const char **connected_ports;

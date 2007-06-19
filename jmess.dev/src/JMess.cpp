@@ -24,9 +24,12 @@
  * JMess.cpp
  * ******************************************************************************
  */
-
 #include "JMess.h"
 
+
+//-------------------------------------------------------------------------------
+//JMess::JMess()
+//-------------------------------------------------------------------------------
 JMess::JMess()
 {
   //connection = jmess_xml.createElement("connection");
@@ -38,29 +41,35 @@ JMess::JMess()
 }
 
 
+//-------------------------------------------------------------------------------
+//JMess::~JMess()
+//-------------------------------------------------------------------------------
 JMess::~JMess()
 {
-  //delete &ConnectedPorts;
-
+  jack_client_close(client);
 }
 
 
+//-------------------------------------------------------------------------------
+//void JMess::writeOutput()
+//-------------------------------------------------------------------------------
 void JMess::writeOutput()
 {
+  //QVector<QVector<QString> > ConnectedPorts;
   QVector<QString> OutputInput(2);
-  
-  this->getConnectedPorts();
+  //ConnectedPorts = getConnectedPorts();
 
-  //cout << "SIZE: " << endl;
-  //cout << "SIZE: " << ConnectedPorts.size() << endl;
+  this->setConnectedPorts();
+
   root = jmess_xml.createElement("jmess");
   for (QVector<QVector<QString> >::iterator it = ConnectedPorts.begin();
        it != ConnectedPorts.end(); ++it) {
     OutputInput = *it;
-    cout << "----------------------------------------------------" << endl;
-    cout << "Output ===> " <<qPrintable(OutputInput[0]) << endl;
-    cout << "Input ===> " <<qPrintable(OutputInput[1]) << endl;
+    //cout << "----------------------------------------------------" << endl;
+    //cout << "Output ===> " <<qPrintable(OutputInput[0]) << endl;
+    //cout << "Input ===> " <<qPrintable(OutputInput[1]) << endl;
 
+    //Initialize XML elements
     connection = jmess_xml.createElement("connection");
     output = jmess_xml.createElement("output");
     input = jmess_xml.createElement("input");
@@ -87,16 +96,21 @@ void JMess::writeOutput()
   jmess_xml.save(out, Indent);
 }
 
-/*
- * getConnectedPorts method is going to return a list of 
- * ouput ports that have connections, i.e., that are connected to something
-*/
-void JMess::getConnectedPorts()
+
+//-------------------------------------------------------------------------------
+//void JMess::writeOutput()
+//
+//getConnectedPorts method is going to return a list of 
+//ouput ports that have connections, i.e., that are connected to something
+//-------------------------------------------------------------------------------
+void JMess::setConnectedPorts()
 {
-  jack_client_t *client; //dummy client to get ports
+  ConnectedPorts.clear();
+
+  //jack_client_t *client; //dummy client to get ports
   jack_status_t status;
   const char **ports, **connections; //vector of ports and connections
-  //Vector<QVector<QString> > ConnectedPorts;
+  //QVector<QVector<QString> > ConnectedPorts;
   QVector<QString> OutputInput(2); //helper variable
   
   //Open a client connection to the JACK server.  Starting a
@@ -129,8 +143,94 @@ void JMess::getConnectedPorts()
     }
   }
 
+  free(ports);
+  //return ConnectedPorts;
 }
-  
+
+
+//-------------------------------------------------------------------------------
+//void JMess::disconnectAll()
+//-------------------------------------------------------------------------------
+void JMess::disconnectAll()
+{
+  QVector<QString> OutputInput(2);
+
+  this->setConnectedPorts();
+
+  for (QVector<QVector<QString> >::iterator it = ConnectedPorts.begin();
+       it != ConnectedPorts.end(); ++it) {
+    OutputInput = *it;
+    //*********************************
+    //TODO: Check success of disconnect
+    //*********************************
+    jack_disconnect(client, OutputInput[0].toAscii(), OutputInput[1].toAscii());
+  }
+}
+
+
+void JMess::parseXML()
+{
+  /*
+  QFile file("input_test.xml");
+  QXmlSimpleReader xmlReader;
+  QXmlInputSource *source = new QXmlInputSource(&file);
+
+  bool ok = xmlReader.parse(source);
+  if (!ok)
+    cout << "Parsing failed." << endl;
+  cout << "PARSING!!! " << endl;
+
+  QXmlContentHandler *handler;
+  //xmlReader.setContentHandler(handler);
+  //xmlReader.setErrorHandler(handler);
+  xmlReader.setContentHandler(handler);
+  //  xmlReader.startDocument();
+  */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   /*
    * Iterate thought all the ports (outputs) to get the connections 
    * to which (inputs) they are connected.
