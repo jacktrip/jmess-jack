@@ -96,7 +96,6 @@ void JMess::writeOutput()
     cerr << "Cannot open file for writing: "
 	 << qPrintable(file.errorString()) << endl;
     exit(1);
-    //return 1;
   }
 
   QTextStream out(&file);
@@ -239,7 +238,7 @@ void JMess::connectPorts()
   QVector<QString> OutputInput(2);
   //cout << "this->parseXML();" << endl;
   this->parseXML();
-
+  
   for (QVector<QVector<QString> >::iterator it = PortsToConnect.begin();
        it != PortsToConnect.end(); ++it) {
     OutputInput = *it;
@@ -248,118 +247,13 @@ void JMess::connectPorts()
     //*********************************
     //cout << qPrintable(OutputInput[0]) << endl;
     //cout << qPrintable(OutputInput[1]) << endl;
-    jack_connect(client, OutputInput[0].toAscii(), OutputInput[1].toAscii());
+    if (jack_connect(client, OutputInput[0].toAscii(), OutputInput[1].toAscii())) {
+      cerr << "WARNING: port: " << qPrintable(OutputInput[0])
+	   << "and port: " << qPrintable(OutputInput[1])
+	   << " were not connected.\n"
+	   << "They might be already connected or they don't exist." << endl;
+    }
   }
-
+    
+    
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  /*
-   * Iterate thought all the ports (outputs) to get the connections 
-   * to which (inputs) they are connected.
-   * TODO:***************
-   *  Output an array of strings with all the connections. Use qt string classes
-   * ********************   
-  */
-
-  /*
-  for (unsigned int i = 0; ports[i]; ++i) {
-    //printf ("%s\n", ports[i]);
-    if ((connections = jack_port_get_all_connections (client, jack_port_by_name(client, ports[i]))) != 0) {
-      cout << "-------------------------" << endl;
-      cout << "OUTPUT " << ports[i] << endl;
-      //printf ("%s\n", ports[i]);
-      for (unsigned int j = 0; connections[j]; j++) {
-	cout << "IS CONNECTED TO INPUT " << connections[j] << endl;
-	//printf ("   %s\n", connections[j]);
-      }
-      free (connections);
-    } 
-  }  
-  */
-
-  //caca = ports;
-  /*
-   * TODO:***************
-   * Try to get just the ouput ports that are connected to something
-   * in a smarter way than the previous section
-   * ********************  
-   */
-  /*
-  for (unsigned int i = 0; ports[i]; ++i) {
-    cout <ck_port_connected (jack_port_by_name(client, ports[i]));
-  }
-  */
-
-
-  
-  /*
-  cout << "SUPER CACA" << endl;
-  for (unsigned int i = 0; ports[i]; ++i) {
-    //cout << "LIST OF ACTIVE PORTS (OUPUTS): " << i << endl;
-    //cout << ports[i] << endl;
-
-    caca.append(ports[i]);
-    cout << "mamukea   " << qPrintable(caca[i]) << endl;
-
-
-    //caca[i] = "fdsjk fjsdklfjs klfsjdlfk s";
-    //cout << qPrintable(caca.at(i)) << endl;
-    //cout << "connected_ports[i]" << endl;
-    //cout << caca.value(i) << endl;
-  }
-  return caca;
-  */
-
-
-  //QString cacumen = "cacument String";
-  //cout << "FAULT!!!!! " << endl;
-  //cout << qPrintable(cacumen) << endl;
-
-
-
-
-
-
-
-
-
-
