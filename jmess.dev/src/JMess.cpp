@@ -168,24 +168,42 @@ void JMess::disconnectAll()
 }
 
 
-void JMess::parseXML()
+//-------------------------------------------------------------------------------
+//void JMess::parseXML()
+//-------------------------------------------------------------------------------
+int JMess::parseXML()
 {
-  /*
+  QString errorStr;
+  int errorLine;
+  int errorColumn;
+  
   QFile file("input_test.xml");
-  QXmlSimpleReader xmlReader;
-  QXmlInputSource *source = new QXmlInputSource(&file);
+  if (!file.open(QIODevice::ReadOnly)) {
+    cerr << "Cannot open file for reading: "
+	 << qPrintable(file.errorString()) << endl;
+    return 1;
+  }
 
-  bool ok = xmlReader.parse(source);
-  if (!ok)
-    cout << "Parsing failed." << endl;
-  cout << "PARSING!!! " << endl;
+  QDomDocument doc;
+  if (!doc.setContent(&file, true, &errorStr, &errorLine,
+		      &errorColumn)) {
+    cerr << "===================================================\n" 
+	 << "Error parsing XML input file:\n"
+	 << "Parse error at line " << errorLine
+	 << ", column " << errorColumn << "\n"
+	 << qPrintable(errorStr) << "\n"
+	 << "===================================================\n";
+    return 1;
+  }
+  
+  QDomElement root = doc.documentElement();
+  if (root.tagName() != "jmess") {
+    cerr << "Error: Root tag should be <jmess>: "
+	 << qPrintable(root.tagName()) << endl;
+    return 1;
+  }
+  
 
-  QXmlContentHandler *handler;
-  //xmlReader.setContentHandler(handler);
-  //xmlReader.setErrorHandler(handler);
-  xmlReader.setContentHandler(handler);
-  //  xmlReader.startDocument();
-  */
 }
 
 

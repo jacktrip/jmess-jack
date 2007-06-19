@@ -52,7 +52,7 @@ public:
   void writeOutput();
   void setConnectedPorts();
   void disconnectAll();
-  void parseXML();
+  int parseXML();
 
 private:
   jack_client_t *client; //dummy client to get ports
