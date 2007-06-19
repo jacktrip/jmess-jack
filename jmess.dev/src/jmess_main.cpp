@@ -22,7 +22,7 @@
 #include <iostream>
 #include <QtXml>
 #include <QIODevice>
-#include <QIODevice>
+//#include <QIODevice>
 
 #include "JMess.h"
 
@@ -31,12 +31,33 @@ using namespace std;
 int main(int argc, char** argv)
 {
 
+  cout << "testJackLSP" << endl;
   JMess testJackLSP;
-  //testJackLSP.getConnectedPorts();
-  testJackLSP.writeOutput();
+  //cout << "writeOutput" << endl;
+  //testJackLSP.writeOutput();
+  //cout << "disconnectAll" << endl;
+  //testJackLSP.disconnectAll();
+  //cout << "parseXML" << endl;
+  //testJackLSP.parseXML();
+  cout << "connectPorts" << endl;
+  testJackLSP.connectPorts();
+ 
 
-  testJackLSP.disconnectAll();
-  testJackLSP.parseXML();
+    /*
+  QDomDocument jmess_xml;
+  QDomElement connection = jmess_xml.createElement("connection");
+  QDomElement output = jmess_xml.createElement("output");
+  QDomElement input = jmess_xml.createElement("input");
+  QDomText output_name = jmess_xml.createTextNode("jack:out11111111");
+  QDomText input_name = jmess_xml.createTextNode("jack:in1111111");
+  
+  jmess_xml.appendChild(connection);
+  connection.appendChild(output);
+  connection.appendChild(input);
+  output.appendChild(output_name);
+  input.appendChild(input_name);
+  */
+  
 
   /*
   const int Indent = 2;

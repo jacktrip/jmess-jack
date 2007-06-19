@@ -53,15 +53,14 @@ public:
   void setConnectedPorts();
   void disconnectAll();
   int parseXML();
+  void connectPorts();
 
 private:
   jack_client_t *client; //dummy client to get ports
-  //jack_status_t status;
-  //const char **ports, **connections; //vector of ports and connections
-  //const char **connected_ports;
-  //QVector<QString> caca;
+  jack_status_t status;
 
   QVector<QVector<QString> > ConnectedPorts;
+  QVector<QVector<QString> > PortsToConnect;
 
   QDomDocument jmess_xml;
   QDomElement root;

@@ -32,12 +32,19 @@
 //-------------------------------------------------------------------------------
 JMess::JMess()
 {
-  //connection = jmess_xml.createElement("connection");
-  //output = jmess_xml.createElement("output");
-  //input = jmess_xml.createElement("input");
-  //output_name = jmess_xml.createTextNode("");
-  //input_name = jmess_xml.createTextNode("");
-  //cout << "cacumen CONSTR" << endl;
+  //Open a client connection to the JACK server.  Starting a
+  //new server only to list its ports seems pointless, so we
+  //specify JackNoStartServer. 
+  client = jack_client_open ("lsp", JackNoStartServer, &status);
+  if (client == NULL) {
+    if (status & JackServerFailed) {
+      cerr << "JACK server not running" << endl;
+    } else {
+      cerr << "jack_client_open() failed, " 
+	   << "status = 0x%2.0x\n" << status << endl;
+    }
+    exit(1);
+  }
 }
 
 
@@ -107,25 +114,8 @@ void JMess::setConnectedPorts()
 {
   ConnectedPorts.clear();
 
-  //jack_client_t *client; //dummy client to get ports
-  jack_status_t status;
   const char **ports, **connections; //vector of ports and connections
-  //QVector<QVector<QString> > ConnectedPorts;
   QVector<QString> OutputInput(2); //helper variable
-  
-  //Open a client connection to the JACK server.  Starting a
-  //new server only to list its ports seems pointless, so we
-  //specify JackNoStartServer. 
-  client = jack_client_open ("lsp", JackNoStartServer, &status);
-  if (client == NULL) {
-    if (status & JackServerFailed) {
-      cerr << "JACK server not running" << endl;
-    } else {
-      cerr << "jack_client_open() failed, " 
-	   << "status = 0x%2.0x\n" << status << endl;
-    }
-    exit(1);
-  }
 
   //Get active output ports.
   ports = jack_get_ports (client, NULL, NULL, JackPortIsOutput);
@@ -173,6 +163,7 @@ void JMess::disconnectAll()
 //-------------------------------------------------------------------------------
 int JMess::parseXML()
 {
+  PortsToConnect.clear();
   QString errorStr;
   int errorLine;
   int errorColumn;
@@ -196,19 +187,71 @@ int JMess::parseXML()
     return 1;
   }
   
-  QDomElement root = doc.documentElement();
-  if (root.tagName() != "jmess") {
+  QDomElement jmess = doc.documentElement();
+  if (jmess.tagName() != "jmess") {
     cerr << "Error: Root tag should be <jmess>: "
 	 << qPrintable(root.tagName()) << endl;
     return 1;
   }
-  
+
+
+  QVector<QString> OutputInput(2);
+  //First check for <connection> tag
+  for(QDomNode n_cntn = jmess.firstChild(); 
+      !n_cntn.isNull(); n_cntn = n_cntn.nextSibling()) {
+    QDomElement cntn = n_cntn.toElement();
+    if (cntn.tagName() == "connection") {
+      //cout << qPrintable(cntn.tagName()) << endl;
+
+      //Now check for ouput & input tag
+      for(QDomNode n_sck = cntn.firstChild(); 
+	  !n_sck.isNull(); n_sck = n_sck.nextSibling()) {
+	QDomElement sck = n_sck.toElement();
+	//cout << qPrintable(sck.tagName()) << endl;
+	//cout << qPrintable(sck.text()) << endl;
+	//cout << "===============================================" << endl;
+	if (sck.tagName() == "output") {
+	  //cout << "OUTPUT" << endl;
+	  OutputInput[0] = sck.text();
+	}
+	else if (sck.tagName() == "input") {
+	  //cout << "INPUT" << endl;
+	  OutputInput[1] = sck.text();
+	}
+      }
+      PortsToConnect.append(OutputInput);
+      //cout << "SUPERCACUMEN" << endl;
+      //cout << qPrintable(OutputInput[0]) << endl;
+      //cout << qPrintable(OutputInput[1]) << endl;
+    }
+  }
+
+  return 0;
 
 }
 
 
+//-------------------------------------------------------------------------------
+//void JMess::connectPorts()
+//-------------------------------------------------------------------------------
+void JMess::connectPorts()
+{
+  QVector<QString> OutputInput(2);
+  //cout << "this->parseXML();" << endl;
+  this->parseXML();
 
+  for (QVector<QVector<QString> >::iterator it = PortsToConnect.begin();
+       it != PortsToConnect.end(); ++it) {
+    OutputInput = *it;
+    //*********************************
+    //TODO: Check success of disconnect
+    //*********************************
+    //cout << qPrintable(OutputInput[0]) << endl;
+    //cout << qPrintable(OutputInput[1]) << endl;
+    jack_connect(client, OutputInput[0].toAscii(), OutputInput[1].toAscii());
+  }
 
+}
 
 
 
