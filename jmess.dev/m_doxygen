@@ -1,0 +1,8 @@
+#!/bin/bash
+
+rm -r /user/j/jcaceres/Library/Web/jmess/*
+
+doxygen jmess_doxygen
+
+chmod -R o+rx /user/j/jcaceres/Library/Web/jmess
+

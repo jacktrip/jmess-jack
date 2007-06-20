@@ -668,10 +668,14 @@ AnyOption::parsePOSIX( char* arg )
 			}
 		}
 	}
-	printVerbose( "Unknown command argument option : " );
-	printVerbose( arg );
-	printVerbose( );
-	printAutoUsage();
+	//*************************************************************************
+	//MODIFIED JP Caceres (seems like a bug to print usage for wrong arguments)
+	//*************************************************************************
+	//printVerbose( "Unknown command argument option : " );
+	//printVerbose( arg );
+	//printVerbose( );
+	//printAutoUsage();
+	//*************************************************************************
 	return '0';
 }
 

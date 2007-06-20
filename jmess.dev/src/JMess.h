@@ -28,6 +28,7 @@
 #define __JMESS_H
 
 #include <iostream>
+#include <string>
 
 #include <QIODevice>
 #include <QString>
@@ -43,31 +44,35 @@ using namespace std;
 
 const int Indent = 2;
 
+//-------------------------------------------------------------------------------
+/*! \brief Class to save and load all jack client connections.
+ *
+ * Saves an XML file with all the current jack connections. This same file can
+ * be loaded to connect evrything again. The XML file can also be edited.
+ *
+ * Has also an option to disconnect all the clients.
+ */
+//-------------------------------------------------------------------------------
 class JMess {
 
 public: 
   JMess();
   virtual ~JMess();
 
-  void writeOutput();
+  void writeOutput(QString xmlOutFile);
   void setConnectedPorts();
   void disconnectAll();
-  int parseXML();
-  void connectPorts();
+  int parseXML(QString xmlInFile);
+  void connectPorts(QString xmlInFile);
 
 private:
-  jack_client_t *client; //dummy client to get ports
+  //********************************************************
+  //TODO: Change member names, starting with mClient, etc...
+  //********************************************************
+  jack_client_t *client; //client to do all the work
   jack_status_t status;
 
   QVector<QVector<QString> > ConnectedPorts;
   QVector<QVector<QString> > PortsToConnect;
-
-  QDomDocument jmess_xml;
-  QDomElement root;
-  QDomElement connection;
-  QDomElement output;
-  QDomElement input;
-  QDomText output_name;
-  QDomText input_name;
 };
 #endif
