@@ -1,4 +1,0 @@
-QT           += xml
-HEADERS      += src/jmess.h
-SOURCES      += src/jmess.cpp \
-                src/jmess_main.cpp
