@@ -19,16 +19,16 @@
 */
 
 
-/**
- * ******************************************************************************
+/*
  * JMess.h
- * ******************************************************************************
  */
+
 #ifndef __JMESS_H
 #define __JMESS_H
 
 #include <iostream>
 #include <string>
+#include <errno.h>
 
 #include <QIODevice>
 #include <QString>
@@ -59,20 +59,23 @@ public:
   JMess();
   virtual ~JMess();
 
-  void writeOutput(QString xmlOutFile);
-  void setConnectedPorts();
   void disconnectAll();
-  int parseXML(QString xmlInFile);
+  void writeOutput(QString xmlOutFile);
   void connectPorts(QString xmlInFile);
 
 private:
-  //********************************************************
-  //TODO: Change member names, starting with mClient, etc...
-  //********************************************************
-  jack_client_t *client; //client to do all the work
-  jack_status_t status;
+  void setConnectedPorts();
+  int parseXML(QString xmlInFile);
 
-  QVector<QVector<QString> > ConnectedPorts;
-  QVector<QVector<QString> > PortsToConnect;
+  jack_client_t *mClient; //Class client
+  jack_status_t mStatus; //Class client status
+
+  //Vectors of Connected Ports and Ports to connects
+  //This are a matrix (Nx2) of string like this:
+  //OuputPort1 InputPort1
+  // ...
+  //OuputPortN InputPortN
+  QVector<QVector<QString> > mConnectedPorts;
+  QVector<QVector<QString> > mPortsToConnect;
 };
 #endif

@@ -20,6 +20,7 @@
 
 
 #include <iostream>
+#include <string>
 
 #include "JMess.h"
 #include "anyoption.h"
@@ -30,11 +31,11 @@ void main_dialog( int argc, char* argv[] );
 
 int main(int argc, char** argv)
 {
-  //QString caca;
-  //cin >> caca;
-  //cout << caca << endl;
+
   main_dialog( argc, argv ); 
+
   return 0;
+
 }
 
 
@@ -79,7 +80,6 @@ void main_dialog( int argc, char* argv[] )
   
   if( ! opt->hasOptions()) { //print usage if no options
     opt->printUsage();
-    cout << "CACUMENSIN" << endl;
     delete opt;
     return;
   }
@@ -91,15 +91,27 @@ void main_dialog( int argc, char* argv[] )
   //Create JMess Object for the following flags
   JMess jmessClient;
 
-  if(opt->getFlag("disconnectall"))
-    jmessClient.disconnectAll();
+  if(opt->getFlag("disconnectall")) {
+    //Confirm before disconnection
+    string answer = "";
+    while ((answer != "yes") && (answer != "no")) {
+      cout << "Are you sure you want to disconnect all? (yes/no): ";
+      cin >> answer;
+    }
+    if (answer == "yes") {
+      jmessClient.disconnectAll();
+    }
+  }
 
   if(opt->getValue("connect") != NULL)
     jmessClient.connectPorts(opt->getValue("connect"));
-
+  else if (opt->getValue("connect") == NULL)
+    cerr << "ERROR: no input file specified for connect." << endl;
+  
   if(opt->getValue("save") != NULL)
     jmessClient.writeOutput(opt->getValue("save"));
-
+  else if (opt->getValue("save") != NULL)
+    cerr << "ERROR: no ouput file name specified to save." << endl;
   
   //8. DONE
   delete opt;
