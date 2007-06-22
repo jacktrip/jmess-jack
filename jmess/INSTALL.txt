@@ -1,0 +1,8 @@
+jmess : Build Instructions for Linux
+
+---
+
+Dependencies:
+You need to have installed in your system qt4-devel and jack-audio-connection-kit-devel
+
+yum install qt4-devel jack-audio-connection-kit-devel
