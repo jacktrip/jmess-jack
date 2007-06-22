@@ -105,13 +105,10 @@ void main_dialog( int argc, char* argv[] )
 
   if(opt->getValue("connect") != NULL)
     jmessClient.connectPorts(opt->getValue("connect"));
-  else if (opt->getValue("connect") == NULL)
-    cerr << "ERROR: no input file specified for connect." << endl;
-  
+
   if(opt->getValue("save") != NULL)
     jmessClient.writeOutput(opt->getValue("save"));
-  else if (opt->getValue("save") != NULL)
-    cerr << "ERROR: no ouput file name specified to save." << endl;
+
   
   //8. DONE
   delete opt;
