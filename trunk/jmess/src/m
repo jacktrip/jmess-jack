@@ -5,12 +5,9 @@ APP_NAME=jmess
 ## Created by Juan-Pablo Caceres
 
 #Cleanup
-rm -r obj
-rm -r moc
-rm $APP_NAME.pro
-rm Makefile
-rm $APP_NAME
-echo "Makefile deleted"
+#rm $APP_NAME.pro
+#rm Makefile
+#echo "cleanup done"
 
 #Create project (.pro) file
 qmake-qt4 -project -o $APP_NAME.pro
@@ -28,6 +25,3 @@ qmake-qt4 -makefile -unix -o Makefile \
 "unix:INSTALLS+=target" $APP_NAME.pro
 
 echo "done"
-
-#"OBJECTS_DIR=obj" "MOC_DIR=moc" \
-#"QMAKE_CLEAN+=$APP_NAME $APP_NAME.pro" \

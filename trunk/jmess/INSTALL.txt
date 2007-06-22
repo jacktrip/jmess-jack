@@ -1,8 +1,55 @@
 jmess : Build Instructions for Linux
 
+jmess can save an XML file with all the current jack connections. This same file can
+be loaded to connect evrything again. The XML file can also be edited.
+It alse also has the option to disconnect all the clients.
+
 ---
-
 Dependencies:
-You need to have installed in your system qt4-devel and jack-audio-connection-kit-devel
 
+You need to have installed the libraries in your system:
+qt4-devel
+jack-audio-connection-kit-devel
+
+If you are using yum (in Fedora Core 6 or 7 for example) you can just install
+them (as root) with:
 yum install qt4-devel jack-audio-connection-kit-devel
+
+---
+Build:
+
+to build, just go to the src directory and type the following two commands:
+./m
+make
+
+If evreything works fine, you will have the excecutable jmess ready to use.
+If you wish, you can install it in your system. Just type (as root):
+make install
+
+If you want to uninstall:
+make uninstall
+
+---
+Usage:
+
+For a list a commands, just type:
+./jmess
+
+If you want to save your current connections (connected with qjackctl for example)
+just type:
+
+./jmess -s filename.xml
+
+All your connections are saved in filename.xml.
+
+If you want to load them:
+./jmess -c filename.xml
+
+And if you first want to disconnect all and the load the saved connections:
+./jmess -d -c filename.xml
+
+If you just want to disconnect all:
+./jmess -d
+
+
+Juan-Pablo Caceres
