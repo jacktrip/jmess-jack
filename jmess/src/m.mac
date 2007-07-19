@@ -15,10 +15,10 @@ qmake -project -o $APP_NAME.pro
 echo "qmake-qt4 .pro built."
 
 #Create Makefile
-qmake -makefile  -o Makefile \
+qmake -makefile -o Makefile \
 "QT+=xml" \
 "QMAKE_CLEAN+=$APP_NAME" \
-"LIBS+=-Xlinker -ljack -framework CoreAudio" \
+"LIBS+=-ljack -framework CoreAudio" \
 "TARGET=$APP_NAME" \
 $APP_NAME.pro
 
