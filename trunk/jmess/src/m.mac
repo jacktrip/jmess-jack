@@ -15,11 +15,16 @@ qmake -project -o $APP_NAME.pro
 echo "qmake-qt4 .pro built."
 
 #Create Makefile
-qmake -makefile -o Makefile \
+qmake -makefile -spec macx-g++ -o Makefile \
 "QT+=xml" \
 "QMAKE_CLEAN+=$APP_NAME" \
-"LIBS+=-ljack -framework CoreAudio" \
+"LIBS+=-framework jack -framework CoreAudio" \
 "TARGET=$APP_NAME" \
+"QMAKE_MAC_SDK = /Developer/SDKs/MacOSX10.4u.sdk" \
+"CONFIG += x86 ppc sdk" \
 $APP_NAME.pro
 
 echo "done"
+
+#Add something like this to statically link librairies
+#"LIBS+=$QTDIR/lib/libQtCore.a" \
