@@ -16,10 +16,10 @@ echo "qmake-qt4 .pro built."
 
 #Create Makefile
 qmake -makefile -spec macx-g++ -o Makefile \
-"QT+=xml" \
-"QMAKE_CLEAN+=$APP_NAME" \
-"LIBS+=-framework jack -framework CoreAudio" \
-"TARGET=$APP_NAME" \
+"QT += xml" \
+"QMAKE_CLEAN += $APP_NAME" \
+"LIBS += -framework jack -framework CoreAudio" \
+"TARGET = $APP_NAME" \
 "QMAKE_MAC_SDK = /Developer/SDKs/MacOSX10.4u.sdk" \
 "CONFIG += x86 ppc sdk" \
 $APP_NAME.pro
