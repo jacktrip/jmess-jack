@@ -17,6 +17,7 @@ echo "qmake-qt4 .pro built."
 #Create Makefile
 qmake -makefile -spec macx-g++ -o Makefile \
 "QT += xml" \
+"QT -= gui" \
 "QMAKE_CLEAN += $APP_NAME" \
 "LIBS += -framework jack -framework CoreAudio" \
 "TARGET = $APP_NAME" \
