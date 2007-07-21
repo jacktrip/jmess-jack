@@ -1,0 +1,33 @@
+#!/bin/bash
+#####################################
+APP_NAME=jmess
+######################################
+## Created by Juan-Pablo Caceres
+
+#Cleanup
+#rm $APP_NAME.pro
+#rm Makefile
+#echo "cleanup done"
+
+#Create project (.pro) file
+qmake-qt4 -project -o $APP_NAME.pro
+
+echo "qmake-qt4 .pro built."
+
+#Create Makefile
+qmake-qt4 -makefile -unix -o Makefile \
+"CONFIG += debug warn_on" \
+"QMAKE_CXXFLAGS += -Wno-deprecated -pg -g" \
+"QT += xml" \
+"QT -= gui" \
+"QMAKE_CLEAN += $APP_NAME" \
+"unix:LIBS +=/usr/lib/libjack.a -lpthread" \
+"unix:DESTDIR = ../bin/" \
+"unix:TARGET = $APP_NAME" \
+"unix:target.path = /usr/bin" \
+"unix:INSTALLS += target" $APP_NAME.pro
+
+echo "done"
+
+## Use this to use realease mode
+#"CONFIG += release warn_on" \

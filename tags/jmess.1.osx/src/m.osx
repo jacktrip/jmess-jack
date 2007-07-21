@@ -1,0 +1,44 @@
+#!/bin/bash
+#####################################
+APP_NAME=jmess
+######################################
+## Created by Juan-Pablo Caceres
+## qmake file to generate universal binary.
+## you need at least OSX 10.3.9
+## Notes: this qmake files compiles using Static Qt Librairies.
+##        to install qt using static librairies on osx, configure as:
+##        ./configure -nomake examples -static -release -no-framework -universal -sdk /Developer/SDKs/MacOSX10.4u.sdk
+## You need JackOsx Installed, since it's using the jack Framework
+
+#Cleanup
+#rm $APP_NAME.pro
+#rm Makefile
+#echo "cleanup done"
+
+#Create project (.pro) file
+qmake -project -o $APP_NAME.pro
+
+echo "qmake .pro built."
+
+#Create Makefile
+qmake -makefile -o Makefile \
+"CONFIG += release" \
+"CONFIG -= app_bundle" \
+"QT += xml" \
+"QT -= gui" \
+"LIBS += -dead_strip /usr/local/lib/libjack.0.dylib -framework CoreAudio" \
+"QMAKE_MAC_SDK = /Developer/SDKs/MacOSX10.4u.sdk" \
+"CONFIG += x86 ppc" \
+"TARGET = $APP_NAME" \
+"DESTDIR = ../bin/" \
+"QMAKE_CLEAN += $APP_NAME" \
+"target.path = /usr/bin" \
+"INSTALLS += target" \
+$APP_NAME.pro
+
+echo "done"
+
+#To link jack as framework
+#"LIBS += -framework jack
+
+
