@@ -3,6 +3,12 @@
 APP_NAME=jmess
 ######################################
 ## Created by Juan-Pablo Caceres
+## qmake file to generate universal binary.
+## you need at least OSX 10.3.9
+## Notes: this qmake files compiles using Static Qt Librairies.
+##        to install qt using static librairies on osx, configure as:
+##        ./configure -nomake examples -static -release -no-framework -universal -sdk /Developer/SDKs/MacOSX10.4u.sdk
+## You need JackOsx Installed, since it's using the jack Framework
 
 #Cleanup
 #rm $APP_NAME.pro
@@ -12,20 +18,27 @@ APP_NAME=jmess
 #Create project (.pro) file
 qmake -project -o $APP_NAME.pro
 
-echo "qmake-qt4 .pro built."
+echo "qmake .pro built."
 
 #Create Makefile
-qmake -makefile -spec macx-g++ -o Makefile \
+qmake -makefile -o Makefile \
+"CONFIG += release" \
+"CONFIG -= app_bundle" \
 "QT += xml" \
 "QT -= gui" \
-"QMAKE_CLEAN += $APP_NAME" \
-"LIBS += -framework jack -framework CoreAudio" \
-"TARGET = $APP_NAME" \
+"LIBS += -dead_strip /usr/local/lib/libjack.0.dylib -framework CoreAudio" \
 "QMAKE_MAC_SDK = /Developer/SDKs/MacOSX10.4u.sdk" \
-"CONFIG += x86 ppc sdk" \
+"CONFIG += x86 ppc" \
+"TARGET = $APP_NAME" \
+"DESTDIR = ../bin/" \
+"QMAKE_CLEAN += $APP_NAME" \
+"target.path = /usr/bin" \
+"INSTALLS += target" \
 $APP_NAME.pro
 
 echo "done"
 
-#Add something like this to statically link librairies
-#"LIBS+=$QTDIR/lib/libQtCore.a" \
+#To link jack as framework
+#"LIBS += -framework jack
+
+
