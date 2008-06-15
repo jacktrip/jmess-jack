@@ -26,12 +26,11 @@ qmake -makefile -o Makefile \
 "CONFIG -= app_bundle" \
 "QT += xml" \
 "QT -= gui" \
-"LIBS += -dead_strip /usr/local/lib/libjack.0.dylib -framework CoreAudio" \
-"QMAKE_MAC_SDK = /Developer/SDKs/MacOSX10.4u.sdk" \
+"LIBS += -dead_strip -ljack -framework CoreAudio" \
 "CONFIG += x86 ppc" \
 "TARGET = $APP_NAME" \
 "DESTDIR = ../bin/" \
-"QMAKE_CLEAN += $APP_NAME" \
+"QMAKE_CLEAN += ../bin/$APP_NAME" \
 "target.path = /usr/bin" \
 "INSTALLS += target" \
 $APP_NAME.pro
@@ -40,5 +39,3 @@ echo "done"
 
 #To link jack as framework
 #"LIBS += -framework jack
-
-
