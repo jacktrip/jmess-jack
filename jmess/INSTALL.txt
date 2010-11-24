@@ -5,9 +5,9 @@ be loaded to connect evrything again. The XML file can also be edited.
 It alse also has the option to disconnect all the clients.
 
 ---
-MacOS X (10.3.9 or higher) Installation:
+MacOS X (10.4 or higher) Installation:
 
-If you are installing on MacOS X, a universal binary is provided.  You just need to have JackOSX installed on your machine
+If you are installing on MacOS X, a binary is provided.  You just need to have JackOSX installed on your machine
 http://www.jackosx.com/
 
 TO install (using Terminal): go to bin/ directory and type:
@@ -25,7 +25,7 @@ You need to have installed the libraries in your system:
 qt4-devel
 jack-audio-connection-kit-devel
 
-If you are using yum (in Fedora Core 6 or 7 for example) you can just install
+If you are using yum (in Fedora Core 12 for example) you can just install
 them (as root) with:
 yum install qt4-devel jack-audio-connection-kit-devel
 
