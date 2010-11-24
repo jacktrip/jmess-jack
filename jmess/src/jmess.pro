@@ -18,11 +18,8 @@ QT += xml
 
 macx {
   message(MAC OS X)
-  QMAKE_CXXFLAGS += -D__MACOSX_CORE__ #-D__UNIX_JACK__ #RtAudio Flags
   CONFIG -= app_bundle
   CONFIG += x86
-  #LIBS += -framework CoreAudio -framework CoreFoundation
-  LIBS += -framework CoreFoundation
   DEFINES += __MAC_OSX__
   }
 linux-g++ {
@@ -47,9 +44,7 @@ INSTALLS += target
 
 
 # Input
-HEADERS += JMess.h \
-           anyoption.h
+HEADERS += JMess.h
 SOURCES += JMess.cpp \
-           anyoption.cpp \
            jmess_main.cpp
 
