@@ -39,15 +39,11 @@ http://www.trolltech.com/download?target=ftp://ftp.trolltech.com/qt/source/qt-ma
 ---
 Build:
 
-to build on Linux, just go to the /src directory and type the following two commands:
+to build on Linux or Mac OS X, just go to the /src directory and type the following two command:
 
-   ./m
-   make
+   ./build
 
-And on MaxOS X:
-    ./m.osx
-    make
-
+						    
 If evreything works fine, you will have the excecutable jmess ready to use. It is located at the ../bin directory. If you wish, you can install it in your system. Just type (as root):
 
    make install
@@ -72,7 +68,7 @@ All your connections are saved in filename.xml.
 
 If you want to load them:
 ./jmess -c filename.xml
-
+						    
 And if you first want to disconnect all and the load the saved connections:
 ./jmess -d -c filename.xml
 
