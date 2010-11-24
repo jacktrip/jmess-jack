@@ -27,6 +27,7 @@
 
 
 #include <iostream>
+#include <cstdlib>
 #include <string>
 #include <getopt.h> // for command line parsing
 
