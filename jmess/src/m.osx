@@ -21,7 +21,7 @@ qmake -project -o $APP_NAME.pro
 echo "qmake .pro built."
 
 #Create Makefile
-qmake -makefile -o Makefile \
+qmake -spec macx-g++ -o Makefile \
 "CONFIG += release" \
 "CONFIG -= app_bundle" \
 "QT += xml" \
@@ -33,6 +33,7 @@ qmake -makefile -o Makefile \
 "QMAKE_CLEAN += ../bin/$APP_NAME" \
 "target.path = /usr/bin" \
 "INSTALLS += target" \
+"QMAKE_CXXFLAGS += -D__MACOSX_CORE__" \
 $APP_NAME.pro
 
 echo "done"

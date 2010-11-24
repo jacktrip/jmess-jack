@@ -60,6 +60,7 @@ void main_dialog( int argc, char* argv[] )
   opt->addUsage(" -c  --connect  inputfile.xml  Load the connections specified at inputfile.xml");
   opt->addUsage(" -s  --save  outputfile.xml    Save current connections in output.xml");
   opt->addUsage(" -d  --disconnectall           Disconnect all the connections");
+  opt->addUsage(" -D  --DisconnectAll           Disconnect all the connections without confirmation");
   opt->addUsage("" );
   
   //4. SET THE OPTION STRINGS/CHARACTERS
@@ -70,6 +71,7 @@ void main_dialog( int argc, char* argv[] )
   opt->setCommandOption("connect", 'c'); // an option (takes an argument)
   opt->setCommandOption("save", 's');
   opt->setCommandFlag( "disconnectall", 'd');
+  opt->setCommandFlag( "DisconnectAll", 'D');
   
   
   // 5. PROCESS THE COMMANDLINE
@@ -83,6 +85,7 @@ void main_dialog( int argc, char* argv[] )
     delete opt;
     return;
   }
+
 
   //6. GET THE VALUES
   if(opt->getFlag("help")) 
@@ -102,6 +105,9 @@ void main_dialog( int argc, char* argv[] )
       jmessClient.disconnectAll();
     }
   }
+
+  if(opt->getValue("DisconnectAll"))
+    jmessClient.disconnectAll();
 
   if(opt->getValue("connect") != NULL)
     jmessClient.connectPorts(opt->getValue("connect"));
