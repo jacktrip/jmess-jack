@@ -21,82 +21,66 @@
 
 #include <iostream>
 #include <string>
+#include <getopt.h> // for command line parsing
 
 #include "JMess.h"
-#include "anyoption.h"
+//#include "anyoption.h"
 
 using namespace std;
 
 void main_dialog( int argc, char* argv[] );
+void printUsage();
+string version  = "1.0.1";
 
+
+//*******************************************************************************
 int main(int argc, char** argv)
 {
-
   main_dialog( argc, argv ); 
-
   return 0;
-
 }
 
 
+//*******************************************************************************
 void main_dialog( int argc, char* argv[] )
 {
   
-  //1. CREATE AN OBJECT
-  AnyOption *opt = new AnyOption();
-  
-  //2. SET PREFERENCES
-  //opt->noPOSIX(); /* do not check for POSIX style character options */
-  opt->setVerbose(); /* print warnings about unknown options */
-  opt->autoUsagePrint(true); /* print usage for bad options */
-  
-  //3. SET THE USAGE/HELP
-  opt->addUsage("JMess: A simple utility so save your jack-audio mess.");
-  opt->addUsage("Copyright (C) 2007 Juan-Pablo Caceres.");
-  opt->addUsage("");
-  opt->addUsage("Usage: " );
-  opt->addUsage("--------------------------------------------" );
-  opt->addUsage(" -h  --help                    Prints this help");
-  opt->addUsage(" -c  --connect  inputfile.xml  Load the connections specified at inputfile.xml");
-  opt->addUsage(" -s  --save  outputfile.xml    Save current connections in output.xml");
-  opt->addUsage(" -d  --disconnectall           Disconnect all the connections");
-  opt->addUsage(" -D  --DisconnectAll           Disconnect all the connections without confirmation");
-  opt->addUsage("" );
-  
-  //4. SET THE OPTION STRINGS/CHARACTERS
-  
-  //for options that will be checked only on the command and line not in option/resource file
-  opt->setCommandFlag("help", 'h'); //a flag (takes no argument) 
-  opt->setCommandFlag( "disconnectall", 'd');
-  opt->setCommandOption("connect", 'c'); // an option (takes an argument)
-  opt->setCommandOption("save", 's');
-  opt->setCommandFlag( "disconnectall", 'd');
-  opt->setCommandFlag( "DisconnectAll", 'D');
-  
-  
-  // 5. PROCESS THE COMMANDLINE
-
-  //go through the command line and get the options
-  opt->processCommandArgs( argc, argv );
-  
-  
-  if( ! opt->hasOptions()) { //print usage if no options
-    opt->printUsage();
-    delete opt;
-    return;
+  // If no command arguments are given, print instructions
+  if(argc == 1) {
+    printUsage();
+    std::exit(0);
   }
-
-
-  //6. GET THE VALUES
-  if(opt->getFlag("help")) 
-    opt->printUsage();
 
   //Create JMess Object for the following flags
   JMess jmessClient;
 
-  if(opt->getFlag("disconnectall")) {
+  // Usage example at:
+  // http://www.gnu.org/software/libc/manual/html_node/Getopt-Long-Option-Example.html#Getopt-Long-Option-Example
+  // options descriptor
+  //----------------------------------------------------------------------------
+  static struct option longopts[] = {
+    // These options don't set a flag.
+    { "disconnectall", no_argument, NULL,  'd' },
+    { "connect", required_argument, NULL, 'c' },
+    { "save", required_argument, NULL,  's' },
+    { "DisconnectAll", no_argument, NULL,  'D' },
+    { "version", no_argument, NULL, 'v' }, // Version Number
+    { "help", no_argument, NULL, 'h' }, // Print Help
+    { NULL, 0, NULL, 0 }
+  };
+
+
+  // Parse Command Line Arguments
+  //----------------------------------------------------------------------------
+  /// \todo Specify mandatory arguments
+  string answer = "";
+  int ch;
+  while ( (ch = getopt_long(argc, argv,
+                            "dc:s:Dvh", longopts, NULL)) != -1 )
+    switch (ch) {
+    case 'd':
+    //-------------------------------------------------------
     //Confirm before disconnection
-    string answer = "";
     while ((answer != "yes") && (answer != "no")) {
       cout << "Are you sure you want to disconnect all? (yes/no): ";
       cin >> answer;
@@ -104,19 +88,62 @@ void main_dialog( int argc, char* argv[] )
     if (answer == "yes") {
       jmessClient.disconnectAll();
     }
+    break;
+    case 'c':
+    //-------------------------------------------------------
+    jmessClient.connectPorts(optarg);
+    break;
+    case 's':
+    //-------------------------------------------------------
+    jmessClient.writeOutput( optarg );
+    break;
+    case 'D':
+    //-------------------------------------------------------
+    jmessClient.disconnectAll();
+    break;
+    case 'v':
+    //-------------------------------------------------------
+    cout << "JMess VERSION: " << version << endl;
+    cout << "Copyright (c) 2007-2010 Juan-Pablo Caceres." << endl;
+    cout << "SoundWIRE group at CCRMA, Stanford University" << endl;
+    cout << "" << endl;
+    std::exit(0);
+    break;
+    case 'h':
+    //-------------------------------------------------------
+    printUsage();
+    break;
   }
 
-  if(opt->getValue("DisconnectAll"))
-    jmessClient.disconnectAll();
+  // Warn user if undefined options where entered
+  //----------------------------------------------------------------------------
+  if (optind < argc) {
+    cout << "------------------------------------------------------" << endl;
+    cout << "WARINING: The following entered options have no effect" << endl;
+    cout << "          They will be ignored!" << endl;
+    cout << "          Type jmess to see options." << endl;
+    for( ; optind < argc; optind++) {
+      printf("argument: %s\n", argv[optind]);
+    }
+    cout << "------------------------------------------------------" << endl;
+  }
+}
 
-  if(opt->getValue("connect") != NULL)
-    jmessClient.connectPorts(opt->getValue("connect"));
 
-  if(opt->getValue("save") != NULL)
-    jmessClient.writeOutput(opt->getValue("save"));
-
-  
-  //8. DONE
-  delete opt;
-  
+//*******************************************************************************
+void printUsage()
+{
+  cout << "" << endl;
+  cout << "JMess: A simple utility so save your jack-audio mess." << endl;
+  cout << "Copyright (C) 2007-2010 Juan-Pablo Caceres." << endl;
+  cout << "VERSION: " << version << endl;
+  cout << "" << endl;
+  cout << "Usage: " << endl;
+  cout << "--------------------------------------------" << endl;
+  cout << " -h  --help                    Prints this help" << endl;
+  cout << " -c  --connect  inputfile.xml  Load the connections specified at inputfile.xml" << endl;
+  cout << " -s  --save  outputfile.xml    Save current connections in output.xml" << endl;
+  cout << " -d  --disconnectall           Disconnect all the connections" << endl;
+  cout << " -D  --DisconnectAll           Disconnect all the connections without confirmation" << endl;
+  cout << "" << endl;
 }
