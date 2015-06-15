@@ -3,7 +3,7 @@
 JMess can save an XML file with all the current [Jack Audio](http://jackaudio.org/) connections. This same file can be loaded to connect everything again. The XML file can also be edited. It also also has the option to disconnect all the clients.
 
 ## Download and Installation ##
-There is a Linux and a Mac OS X version of JMees. To install just download, uncompress, and follow the instrunctions on `INSTALL.txt`.
+There is a Linux and a Mac OS X version of JMess. To install just download, uncompress, and follow the instructions on `INSTALL.txt`.
 
 ## Using JMess ##
 
@@ -17,7 +17,7 @@ To load your connections from a file, just type:
 
 `jmess -c filename.xml`
 
-Note that if you have connections running, the command above is going to connect what was saved on the filename.xml, keeping the connections that you have. If you want to get exactly what was saved on filename.xml, use the flag -d to disonnect all:
+Note that if you have connections running, the command above is going to connect what was saved on the filename.xml, keeping the connections that you have. If you want to get exactly what was saved on filename.xml, use the flag -d to disconnect all:
 
 `jmess -d -c filename.xml`
 
