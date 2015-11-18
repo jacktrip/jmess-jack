@@ -13,7 +13,7 @@ QT += xml
 
 !win32 {
   INCLUDEPATH+=/usr/local/include
-  LIBS += -ljack -lm
+  LIBS += -L/usr/local/lib -ljack -lm
 }
 
 macx {

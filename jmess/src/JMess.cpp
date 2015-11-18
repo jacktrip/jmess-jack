@@ -179,7 +179,7 @@ void JMess::disconnectAll()
        it != mConnectedPorts.end(); ++it) {
     OutputInput = *it;
     
-    if (jack_disconnect(mClient, OutputInput[0].toAscii(), OutputInput[1].toAscii())) {
+    if (jack_disconnect(mClient, OutputInput[0].toLatin1(), OutputInput[1].toLatin1())) {
       cerr << "WARNING: port: " << qPrintable(OutputInput[0])
 	   << "and port: " << qPrintable(OutputInput[1])
 	   << " could not be disconnected.\n";
@@ -272,11 +272,11 @@ void JMess::connectPorts(QString xmlInFile)
 	 it != mPortsToConnect.end(); ++it) {
       OutputInput = *it;
 
-      if (jack_connect(mClient, OutputInput[0].toAscii(), OutputInput[1].toAscii())) {
+      if (jack_connect(mClient, OutputInput[0].toLatin1(), OutputInput[1].toLatin1())) {
 	//Display a warining only if the error is not because the ports are already
 	//connected, in case the program doesn't display anyting.
 	if (EEXIST != 
-	    jack_connect(mClient, OutputInput[0].toAscii(), OutputInput[1].toAscii())) {
+        jack_connect(mClient, OutputInput[0].toLatin1(), OutputInput[1].toLatin1())) {
 	  cerr << "WARNING: port: " << qPrintable(OutputInput[0])
 	       << "and port: " << qPrintable(OutputInput[1])
 	       << " could not be connected.\n";
