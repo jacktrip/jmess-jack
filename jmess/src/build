@@ -27,12 +27,11 @@ if [[ $platform == 'linux' ]]; then
     QSPEC=linux-g++
 elif [[ $platform == 'macosx' ]]; then
     QCMD=qmake
-    QSPEC=macx-g++
 fi
 
 # Build
-$QCMD -spec $QSPEC jmess.pro
+$QCMD jmess.pro
 make clean
-$QCMD -spec $QSPEC jmess.pro
+$QCMD jmess.pro
 make release
 

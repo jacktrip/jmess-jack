@@ -38,7 +38,7 @@ using namespace std;
 
 void main_dialog( int argc, char* argv[] );
 void printUsage();
-string version  = "1.0.2";
+string version  = "1.0.3";
 
 
 //*******************************************************************************
@@ -143,7 +143,7 @@ void printUsage()
 {
   cout << "" << endl;
   cout << "JMess: A simple utility so save your jack-audio mess." << endl;
-  cout << "Copyright (C) 2007-2010 Juan-Pablo Caceres." << endl;
+  cout << "Copyright (C) 2007-2016 Juan-Pablo Caceres." << endl;
   cout << "VERSION: " << version << endl;
   cout << "" << endl;
   cout << "Usage: " << endl;
